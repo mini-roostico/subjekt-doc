@@ -4,9 +4,10 @@
 
 <instance-profile id="dcx"
                  name="Subjekt"
-                 start-page="starter-topic.topic">
+                 start-page="Introduction.md">
 
-    <toc-element topic="starter-topic.topic"/>
+    <toc-element topic="Introduction.md"/>
+    <toc-element topic="Template-resolution.md"/>
     <toc-element topic="Gradle-plugin.md"/>
     <toc-element topic="API.md"/>
 </instance-profile>

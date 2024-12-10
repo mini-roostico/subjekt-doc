@@ -6,4 +6,8 @@
         <accepts>page.html</accepts>
     </rule>
     -->
+    <rule id="4aeadcb2">
+        <description>Created after removal of "Introduction" from Subjekt</description>
+        <accepts>starter-topic.html</accepts>
+    </rule>
 </rules>

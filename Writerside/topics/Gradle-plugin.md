@@ -1,6 +1,6 @@
 # Gradle plugin
 
-Subjekt is available as a very simple Gradle plugin with *id*: `io.github.freshmag.subjekt`, currently at version 1.0.0.
+Subjekt is available as a very simple Gradle plugin with *id*: `io.github.freshmag.subjekt`, currently at version `1.0.0.`
 
 This plugin provides a single task named `generateSubjektFiles`, that generates the files starting from the provided 
 YAML configuration files.
