@@ -3,9 +3,23 @@
 <topic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd"
        id="starter-topic" title="<NAME OF THE TOPIC>">
-    <title>
-        Get started
-    </title>
+    <title>Introduction</title>
+    <p>
+        <b>Subjekt</b> is a simple tool to easily create files based on some template, specified in a YAML
+        configuration file.
+    </p>
+    <p>
+        Internally, it uses a custom compiler to process <i>expressions</i> inside the YAML file in order to
+        create <b>permutations</b> of custom parameters' values.
+    </p>
+
+    <chapter title="Getting started" id="getting-started">
+        <p>
+            To start using Subjekt, you can use the <a href="Gradle-plugin.md"/> at the last
+            version available or directly import the <a href="API.md"/> as a Gradle dependency
+            (<code>io.github.freshmag:io.github.subjekt:1.1.1</code>)
+        </p>
+    </chapter>
 
 
 </topic>

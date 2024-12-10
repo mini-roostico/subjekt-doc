@@ -7,4 +7,6 @@
                  start-page="starter-topic.topic">
 
     <toc-element topic="starter-topic.topic"/>
+    <toc-element topic="Gradle-plugin.md"/>
+    <toc-element topic="API.md"/>
 </instance-profile>
