@@ -3,7 +3,7 @@
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="dcx"
-                 name="<NAME OF THE SITE>"
+                 name="Subjekt"
                  start-page="starter-topic.topic">
 
     <toc-element topic="starter-topic.topic"/>
