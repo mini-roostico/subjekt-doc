@@ -6,7 +6,7 @@
     <variables>
         <primary-color>#C41EF2</primary-color>
         <custom-favicons>favicon.svg</custom-favicons>
-        <header-logo>favicon.svg</header-logo>
+        <header-logo>logo.png</header-logo>
     </variables>
     <build-profile instance="dcx">
         <variables>
