@@ -7,12 +7,12 @@ create _permutations_ of custom parameters' values.
 
 ## Getting started
 
-To start using Subjekt, you can use the <a href="Gradle-plugin.md"/> at the last version available or directly import 
-the <a href="API.md"/> as a Gradle dependency (`io.github.freshmag:io.github.subjekt:1.1.1`)
+~~To start using Subjekt, you can use the <a href="Gradle-plugin.md"/> at the last version available or directly import 
+the <a href="API.md"/> as a Gradle dependency (`io.github.mini-roostico:io.github.subjekt:1.1.1`)~~
 
 ## Usage
 
-Subjekt works using YAML **configuration files**. 
+Subjekt works using YAML or JSON **configuration files**. 
 This explanation assumes you have a basic understanding of the [YAML format](https://yaml.org/).
 
 All Subjekt YAML must follow a structure similar to this one:
@@ -38,10 +38,7 @@ The simplest configuration you can have is something like this:
 
 ```yaml
 name: "Simple suite"
-subjects:
-- name: "SingleSubject"
-  code: "simple content"
-  outcomes: []
+subject: "simple content"
 ```
 
 This generates only one `ResolvedSubject` whose content is "simple content", and though will be rendered to only one 
@@ -60,12 +57,11 @@ parameters:
     values: ["o", "x"]
 subjects:
   - name: "Subject ${{ label }}${{ punctuation }}"
-    code: |-
+    body: |-
       ${{ punctuation }} ${{ label }}
-    outcomes: []
 ```
 
-This configuration will produce **four** `ResolvedSubject`s, with the following code:
+This configuration will produce **four** `ResolvedSubject`s, with the following body:
 ```Generic
 o v1
 o v2
@@ -107,22 +103,20 @@ You can declare macros both at the **top level** and the **subject level**.
 ```yaml
 name: "..."
 macros:
-  - def: "macroName(a)"
-    values:
-      - "(${{ a }})"
-      - "{${{ a }}}"
+  def: "macroName(a)"
+  values:
+  - "(${{ a }})"
+  - "{${{ a }}}"
 parameters:
-  - name: "Par1"
-    values: ["cool", "bad"]
+  name: "Par1"
+  values: ["cool", "bad"]
 subjects:
-  - name: "Subject"
-    macros:
-      - def: "innerMacro()"
-        values:
-          - "This is very ${{ Par1 }}:"
-    code: |-
-      ${{ innerMacro() }} ${{ macroName("hello") }} !!!
-    outcomes: []
+  name: "Subject"
+  macros:
+  - def: "innerMacro()"
+    values: "This is very ${{ Par1 }}:"
+  body: |-
+    ${{ innerMacro() }} ${{ macroName("hello") }} !!!
 ```
 
 This configuration will produce the following subjects:
@@ -147,3 +141,10 @@ as _code_ for the subject, you will only obtain these two results:
 
 And not all the possible permutations. If you are curious, again, see the [Template resolution section](Template-resolution.md)
 for more details.
+
+### Subjekt syntax
+
+Subjekt uses a flexible YAML syntax: as you can see in previous examples, you can omit writing YAML or JSON arrays 
+when there is only one element. You can write many synonyms for the keys, for example `id`, `identifier` and `name` 
+are all resolved into the same thing inside parameters. You can use names as singulars (e.g. `parameter`) and use 
+any key you like inside the `subjects` block.

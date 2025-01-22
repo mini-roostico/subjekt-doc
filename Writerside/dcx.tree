@@ -6,7 +6,9 @@
                  name="Subjekt"
                  start-page="Introduction.md">
 
-    <toc-element topic="Introduction.md"/>
+    <toc-element topic="Introduction.md">
+        <toc-element topic="Using-Subjekt-from-NodeJS.md"/>
+    </toc-element>
     <toc-element topic="Template-resolution.md"/>
     <toc-element topic="Gradle-plugin.md"/>
     <toc-element topic="API.md"/>
