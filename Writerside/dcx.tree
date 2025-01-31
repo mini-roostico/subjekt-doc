@@ -12,4 +12,12 @@
     <toc-element topic="Template-resolution.md"/>
     <toc-element topic="Gradle-plugin.md"/>
     <toc-element topic="API.md"/>
+    <toc-element topic="Report.md">
+        <toc-element topic="Requirements.md"/>
+        <toc-element topic="Glossary.md"/>
+        <toc-element topic="Domain-Driven-Design.md"/>
+        <toc-element topic="DevOps.md"/>
+        <toc-element topic="Testing-and-Validation.md"/>
+        <toc-element topic="Conclusions.md"/>
+    </toc-element>
 </instance-profile>
