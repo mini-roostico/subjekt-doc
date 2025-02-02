@@ -16,7 +16,9 @@
         <toc-element topic="Requirements.md"/>
         <toc-element topic="Glossary.md"/>
         <toc-element topic="Domain-Driven-Design.md"/>
+        <toc-element topic="Implementation-details.md"/>
         <toc-element topic="DevOps.md"/>
+        <toc-element topic="Deployment.md"/>
         <toc-element topic="Testing-and-Validation.md"/>
         <toc-element topic="Conclusions.md"/>
     </toc-element>
