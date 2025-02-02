@@ -1,7 +1,7 @@
 # Glossary
 
 During the initial phases of the project's development, we identified the main terms that defined the entities and
-objects of the Subjekt domain. Since we already identified the main **contexts**of the domain, we separated right at the
+objects of the Subjekt domain. Since we already identified the main **contexts** of the domain, we separated right at the
 start the two main *spheres* of the model.
 
 Here the terms are described in a common language used by all the stakeholders taking part of the project.
