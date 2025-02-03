@@ -263,3 +263,78 @@ package GenerationResultAggregate {
 After analyzing the three contexts, we identified the following bounded contexts, focusing on the common terms and 
 identifying the related differences:
 
+```mermaid
+graph TD
+    subgraph Library
+        L1[Suite]
+        L2[Subject]
+        L3[Configuration]
+        L4[Parameter]
+        L5[Macro]
+        L6[ResolvedSubject]
+        L7[Source]
+        L8[Result]
+    end
+
+    subgraph API
+        A1[User]
+        A2[Source]
+        A3[Result]
+        A4[UserRegistry]
+        A5[SourceRegistry]
+        A6[AuthenticationService]
+        A7[GenerationService]
+    end
+
+    subgraph Frontend
+        F1[User]
+        F2[Suite]
+        F3[Source]
+        F4[Subject]
+        F5[Configuration]
+        F6[Parameter]
+        F7[Macro]
+        F8[GenerationResult]
+        F9[ResolvedSubject]
+    end
+
+    L7 --- A2
+    L8 --- A3
+    A1 --- F1
+    L1 --- F2
+    L2 --- F4
+    L3 --- F5
+    L4 --- F6
+    L5 --- F7
+    L6 --- F9
+
+```
+
+The common terms between contexts have been highlighted. 
+
+## Architecture
+
+The global architecture adopted **customer-supplier** as model integrity pattern, with the Subjekt Library as the 
+supplier and the Subjekt API as customer. The Subjekt Frontend is a customer of both the Subjekt Library and the Subjekt
+API. 
+
+Inside the Subjekt API context, the **shared kernel** pattern has been adopted to share the model for two different
+sub-contexts, `auth` and `api`, sharing a `common` model.
+
+The following is the architecture diagram:
+
+```plantuml
+@startuml
+[Subjekt Library]
+[Subjekt Frontend]
+
+[Subjekt Library] --> [Subjekt API] : "Customer-Supplier"
+[Subjekt API] --> [Subjekt Frontend] : "Customer-Supplier"
+
+package "Subjekt API" {
+    [auth] - [common]
+    [common] - [api]
+}
+@enduml
+```
+
