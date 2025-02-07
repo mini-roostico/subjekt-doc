@@ -22,19 +22,44 @@ The deployment of the whole project is summarized in the following diagram:
 
 ```plantuml
 @startuml
-node "Docker Host" {
-    [auth-service]
-    [api-service]
-    [web-frontend]
-    [mongodb]
+node "Frontend" << container >> {
+    [nginx] << Web Server >>
+    [vue-app] << Frontend web app >>
 }
 
-[web-frontend] --> [api-service] : depends on
-[web-frontend] --> [auth-service] : depends on
+node "API service" << container >> {
+    [api-service] << Service >>
+}
 
-[api-service] --> [Subjekt Library] : uses
-[api-service] --> [common Library] : uses
-[auth-service] --> [common Library] : uses
+node "Auth service" << container >> {
+    [auth-service] << Service >>
+}
 
+node "Database" << container >> {
+    [mongo] << Database >>
+}
+
+[nginx] ..> [api-service] : <<serves>>
+[nginx] ..> [auth-service] : <<serves>>
+[nginx] ..> [vue-app] : <<serves>>
+
+[Subjekt Library]
+[api-service] ..> [api-common] : <<uses>>
+[auth-service] ..> [api-common] : <<uses>>
+[api-service] ..> [mongo] : <<uses>>
+[auth-service] ..> [mongo] : <<uses>>
+
+package "Repositories" {
+    [Maven]
+    [Npmjs]
+    [GitHub Packages]
+}
+
+[Subjekt Library] ..> [Maven] : <<publishes>>
+[Subjekt Library] ..> [Npmjs] : <<publishes>>
+[Subjekt Library] ..> [GitHub Packages] : <<publishes>>
+[api-service] .> [Npmjs] : <<uses version from>>
+
+[api-common] ..> [Npmjs] : <<publishes>>
 @enduml
 ```
