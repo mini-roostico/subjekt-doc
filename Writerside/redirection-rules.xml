@@ -10,4 +10,8 @@
         <description>Created after removal of "Introduction" from Subjekt</description>
         <accepts>starter-topic.html</accepts>
     </rule>
+    <rule id="1ba26355">
+        <description>Created after removal of "Testing and Validation" from Subjekt</description>
+        <accepts>Testing-and-Validation.html</accepts>
+    </rule>
 </rules>

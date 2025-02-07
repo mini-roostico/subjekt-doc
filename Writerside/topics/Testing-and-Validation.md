@@ -1,3 +1,0 @@
-# Testing and Validation
-
-Start typing here...
