@@ -11,7 +11,8 @@
     </toc-element>
     <toc-element topic="Template-resolution.md"/>
     <toc-element topic="Gradle-plugin.md"/>
-    <toc-element topic="API.md"/>
+    <toc-element toc-title="Subjekt Library API"
+                 target-for-accept-web-file-names="https://mini-roostico.github.io/subjekt/"/>
     <toc-element topic="Report.md">
         <toc-element topic="Requirements.md"/>
         <toc-element topic="Glossary.md"/>
