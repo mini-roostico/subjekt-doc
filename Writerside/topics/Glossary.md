@@ -35,17 +35,18 @@ contexts.
 ## Subjekt - API
 
 The API refers to the context in which Subjekt is used as a library from the outside, in a user-ready service. Here,
-only some of the terms are also present in the library context, because the API doesn't need a notion of those.
-These are the *Source* and the *Result*. Note: from the point of view of the API, their definition appears to be
-slightly different.
+only some of the terms are also present in the library context, because the API doesn't need a notion of those. Even
+though there are duplications, the definitions are slightly different, as they are seen from the perspective of the API.
 
-| Glossary term             | Definition                                                                                              |
-|---------------------------|---------------------------------------------------------------------------------------------------------|
-| **User**                  | A person who interacts with the API.                                                                    |
-| **Source**                | A configuration object that can be saved and edited.                                                    |
-| **Result**                | An entity that represents the result of the Source elaboration.                                         |
-| **UserRegistry**          | An entity that manages the users' repository.                                                           |
-| **SourceRegistry**        | An entity that manages the sources' repository.                                                         |
-| **AuthenticationService** | An entity that manages users' authentication.                                                           |
-| **GenerationService**     | An entity that manages the Source elaboration.                                                          |
-
+| Glossary term             | Definition                                                         |
+|---------------------------|--------------------------------------------------------------------|
+| **User**                  | A person who interacts with the API.                               |
+| **Source**                | A configuration object that can be saved and edited.               |
+| **Parameter**             | A set of values identified by a unique name.                       |
+| **Macro**                 | A map from a name definition to a set of values                    |
+| **Subject**               | A map of keys and values that defines the output of the generation |
+| **Configuration**         | A set of values that can be used to configure the generation.      |
+| **Result**                | An entity that represents the result of the Source elaboration.    |
+| **UserRegistry**          | An entity that manages the users' repository.                      |
+| **SourceRegistry**        | An entity that manages the sources' repository.                    |
+| **AuthenticationService** | An entity that manages users' authentication.                      |                                                       |

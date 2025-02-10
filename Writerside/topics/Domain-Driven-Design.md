@@ -117,22 +117,26 @@ SuiteFactory ..> sourceSubjekt : "handles"
 In the context of the Subjekt API, we identified the following terms, expresses in ubiquitous language
 (note: same as the glossary):
 
-| Glossary term             | Definition                                                                                              |
-|---------------------------|---------------------------------------------------------------------------------------------------------|
-| **User**                  | A person who interacts with the API.                                                                    |
-| **Source**                | A configuration object that can be saved and edited.                                                    |
-| **Result**                | An entity that represents the result of the Source elaboration.                                         |
-| **UserRegistry**          | An entity that manages the users' repository.                                                           |
-| **SourceRegistry**        | An entity that manages the sources' repository.                                                         |
-| **AuthenticationService** | An entity that manages users' authentication.                                                           |
-| **GenerationService**     | An entity that manages the Source elaboration.                                                          |
+| Glossary term             | Definition                                                         |
+|---------------------------|--------------------------------------------------------------------|
+| **User**                  | A person who interacts with the API.                               |
+| **Source**                | A configuration object that can be saved and edited.               |
+| **Parameter**             | A set of values identified by a unique name.                       |
+| **Macro**                 | A map from a name definition to a set of values                    |
+| **Subject**               | A map of keys and values that defines the output of the generation |
+| **Configuration**         | A set of values that can be used to configure the generation.      |
+| **Result**                | An entity that represents the result of the Source elaboration.    |
+| **UserRegistry**          | An entity that manages the users' repository.                      |
+| **SourceRegistry**        | An entity that manages the sources' repository.                    |
+| **AuthenticationService** | An entity that manages users' authentication.                      |                                                       |
 
-The `Source` is homonym with the one in the Subjekt library context, but its definition refers to the fact of being
-*editable* and *"saveable"*.
-
-The `Result` too is homonym with the one in the Subjekt library context, but its definition refers more to the fact of 
-being the *final product* of the elaboration, rather than an object produced by an `Exporter` (which is not present in
-this context).
+There are some homonym terms with the Subjekt Library context, but their definition is slightly different. For example:
+- `Source`: its definition refers to the fact of being *editable* and *"saveable"*.
+- `Result`: its definition refers more to the fact of being the *final product* of the elaboration, rather than an 
+object produced by an `Exporter` (which is not present in this context).
+- `Parameter`, `Macro`, `Subject`, `Configuration`: here they represent simple data structures that are used to 
+generate the final result. The `Suite` is not present, in fact these objects represent only the data that will be
+saved and edited as `Source`, the one fed to the Subjekt Library.
 
 The following is the context map for the Subjekt API:
 
@@ -148,8 +152,19 @@ hide <<Aggregate Root>> circle
 hide <<Repository>> circle
 
 class User <<Entity>>
-class sourceApi as "Source" <<Value Object>>
 
+package SourceAggregate {
+    class Source <<Aggregate Root>>
+    class Parameter <<Value Object>>
+    class Macro <<Value Object>>
+    class Subject <<Value Object>>
+    class Configuration <<Value Object>>
+    
+    Source "1" o-- "n" Parameter
+    Source "1" o-- "n" Macro
+    Source "1" o-- "n" Subject
+    Source "1" o-- "1" Configuration
+}
 class resultApi as "Result" <<Value Object>>
 class UserRegistry <<Repository>>
 
@@ -157,7 +172,7 @@ UserRegistry "1" o-- "n" User : "contains"
 
 class SourceRegistry <<Repository>>
 
-SourceRegistry "1" o-- "n" sourceApi : "contains"
+SourceRegistry "1" o-- "n" Source : "contains"
 
 class AuthenticationService <<Service>>
 
@@ -165,12 +180,10 @@ AuthenticationService ..> UserRegistry : "updates"
 
 class SourceService <<Service>>
 SourceService ..> SourceRegistry : "updates"
-
-class GenerationService <<Service>>
-GenerationService ...> resultApi: "presents"
+SourceService ...> resultApi: "presents"
 
 
-User ..> sourceApi : "accesses"
+User ..> Source : "accesses"
 @enduml
 ```
 
@@ -231,11 +244,10 @@ User ..> sourceSubjekt : "accesses"
 package GenerationResultAggregate {
     class GenerationResult <<Aggregate Root>>
     class ResolvedSubject <<Value Object>>
-    class GenerationTree <<Value Object>>
+    class GenerationGraph <<Value Object>>
     
     GenerationResult "1" o-- "n" ResolvedSubject
-    GenerationResult "1" o-- "1" GenerationTree
-}
+    GenerationResult "1" o-- "1" GenerationGraph
 @enduml
 ```
 
@@ -264,7 +276,6 @@ graph TD
         A4[UserRegistry]
         A5[SourceRegistry]
         A6[AuthenticationService]
-        A7[GenerationService]
     end
 
     subgraph Frontend
@@ -319,3 +330,277 @@ package "Subjekt API" {
 @enduml
 ```
 
+## Design in detail
+
+After the initial analysis of the contexts and the architecture, we started designing a more detailed version of the 
+model. Following DDD principles, we translated the main entities and value objects into a class diagram.
+
+### Subjekt Library class diagram
+```plantuml
+
+@startuml
+@startuml
+hide empty members
+interface Suite {
+    + suiteId: String
+    + subjects: Collection<Subject>
+    + symbolTable: SymbolTable
+    + configuration: Configuration
+}
+interface Subject {
+    + subjectId: String
+    + resolvables: Map<String, Resolvable>
+}
+interface Parameter {
+    + parameterId: String
+    + values: Collection<String>
+}
+interface Macro {
+    + macroId: String
+    + arguments: Collection<String>
+    + values: Collection<Resolvable>
+}
+interface Configuration {
+    + settings: Map<String, Any>
+}
+interface SuiteFactory {
+    + parseSource(source: Source): Suite
+}
+
+Suite "1" *-- "n" Subject
+Suite *-- Configuration
+Suite o-- SymbolTable
+
+SuiteFactory ..> Source : uses
+SuiteFactory ..> Suite : creates
+
+interface Context {
+    + parameters: Collection<DefinedParameter>
+    + macros: Collection<DefinedMacro>
+}
+
+Context "1" o-- "n" DefinedParameter
+Context "1" o-- "n" DefinedMacro
+
+interface DefinedParameter {
+    + parameterId: String
+    + value: String
+}
+
+interface DefinedMacro {
+    + macroId: String
+    + value: Resolvable
+}
+
+interface SymbolTable {
+    + macros: Collection<Macro>
+    + parameters: Collection<Parameter>
+}
+
+interface Module {
+    + moduleId: String
+    + symbolTable: SymbolTable
+}
+
+Module o-- SymbolTable
+
+SymbolTable "1" o-- "n" Parameter
+SymbolTable "1" o-- "n" Macro
+
+interface ResolvedSuite {
+    + suiteId: String
+    + resolvedSubjects: Collection<ResolvedSubject>
+}
+
+ResolvedSuite "1" *-- "n" ResolvedSubject
+
+interface ResolvedSubject {
+    + parentSubjectId: String
+    + instances: Map<String, Instance>
+}
+
+ResolvedSubject "1" *-- "n" Instance
+Subject "1" *-- "n" Resolvable
+Macro "1" *-- "n" Resolvable
+DefinedMacro "1" *-- "n" Resolvable
+
+interface Resolvable
+interface Instance<T> {
+    + value: T
+}
+
+interface Exporter {
+    + exportAsJson(resolvedSuite: ResolvedSuite): JsonResult
+    + exportAsText(resolvedSuite: ResolvedSuite): TextResult
+}
+
+Exporter ..> JsonResult : "uses"
+Exporter ..> TextResult : "uses"
+Exporter ..> ResolvedSuite : "exports"
+Mapper ..> ResolvedSuite : "converts"
+
+interface Result {
+    + asString(): String
+    + toFiles(path: String): Collection<File>
+}
+class JsonResult
+class TextResult
+
+Result <|-- JsonResult
+Result <|-- TextResult
+
+interface Source
+Source <|-- JsonSource
+Source <|-- YamlSource
+
+interface Mapper {
+    + map(resolvedSuite: ResolvedSuite): ResolvedSuite
+}
+@enduml
+```
+
+As we can see, additional relationships have been added to the diagram, such as the one between `Resolvable` and 
+`DefinedMacro`. This relationship arose when we realized that a `DefinedMacro` can be seen as a `Resolvable` too, but 
+only with a single value. This less abstract connection together with others helped us to better understand the model 
+and to design a more cohesive and consistent system.
+
+### Subjekt API class diagram
+```plantuml
+@startuml
+hide empty members
+interface User {
+    + email: String
+    + password: String
+    + firstName: String
+    + lastName: String
+}
+interface UserRegistry {
+    + createUser(email: String, password: String, firstName: String, lastName: String): User
+    + readUser(email: String): User
+    + updateUser(email: String, newUserData: User): User
+    + deleteUser(email: String): User
+}
+
+interface SourceRegistry {
+    + createSource(source: Source): Source
+    + readSource(sourceId: String): Source
+    + updateSource(sourceId: String, newSource: Source): Source
+    + deleteSource(sourceId: String): Source
+}
+
+interface AuthenticationService {
+}
+
+interface SourceService {
+}
+
+SourceService ..> SourceRegistry : "uses"
+SourceService ..> Result : "uses"
+SourceRegistry ..> Source : "contains"
+
+UserRegistry ..> User : "contains"
+SourceService ..> AuthenticationService : "contacts"
+
+
+interface Result {
+    + asString(): String
+    + toFiles(path: String): Collection<File>
+}
+
+interface Source {
+    + name: String
+    + userEmail: String
+    + lastUpdate: Date
+    + configuration: Configuration
+    + subjects: List<Subject>;
+    + parameters: List<Parameter>;
+    + macros: List<Macro>;
+}
+
+class Configuration << (T,#FF7700) Map<string, string> >>
+class Subject << (T,#FF7700) Map<string, string> >>
+class Parameter << (T,#FF7700) Map<string, List<string>> >>
+class Macros << (T,#FF7700) Map<string, List<string>> >>
+
+Source *-- Configuration
+Source *-- Subject
+Source *-- Parameter
+Source *-- Macros
+
+AuthenticationService ..> UserRegistry : "updates"
+@enduml
+```
+
+The `Source` class acts as a container for all the data that will be used by the Subjekt Library to generate the final
+result. The `Result` class is used to represent the final product of the elaboration, and it is used by the 
+`SourceService`. 
+
+The entries of the `Source` class are all **type aliases**: this choice has been made since they don't need any extra 
+logic, and they are just data containers (in fact they are all *Value Objects*).
+
+### Subjekt Frontend class diagram
+```plantuml
+@startuml
+hide empty members
+interface User {
+    + email: String
+    + password: String
+    + firstName: String
+    + lastName: String
+}
+interface Suite {
+    + name: String
+    + subjects: List<Subject>
+    + macros: List<Macro>
+    + parameters: List<Parameter>
+    + configuration: Configuration
+}
+interface Source {
+    + id: String
+    + name: String
+    + lastUpdate: Date
+    + yaml: String
+}
+
+interface Subject {
+    + name: String
+    + pairs: List<Pair<String, String>>
+}
+
+interface Parameter {
+    + name: String
+    + values: List<String>
+}
+interface Macro {
+    + definition: String
+    + values: List<String>
+}
+interface GenerationResult {
+    + resolvedSubjects: List<ResolvedSubject>
+    + generationGraph: GenerationGraph
+}
+interface ResolvedSubject {
+    + name: String
+    + values: List<Map<String, String>>
+}
+class GenerationGraph << (T,#FF7700) Graph<String> >>
+class Configuration << (T,#FF7700) Map<String, String> >>
+
+User *-- Source : "possesses"
+Source ..> Suite : "gets processed into"
+Suite *-- Subject
+Suite *-- Parameter
+Suite *-- Macro
+Suite *-- Configuration
+GenerationResult *-- ResolvedSubject
+GenerationResult *-- GenerationGraph
+
+Suite --> GenerationResult : "produces"
+@enduml
+```
+
+Main entities of the Subjekt Library are used also in the Subjekt Frontend. Here the `Suite` class is used to represent
+the `Source` from the point of view of the *generation*, while the `Source` is used to represent the management of the
+`User` saved data. The `Source` is saved containing a YAML, meaning that the `Suite` gets processed inside the 
+application logic. The `GenerationResult` is the final product of the generation process, and it contains the 
+`ResolvedSubject`s and the `GenerationGraph` summarizing the process.
