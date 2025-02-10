@@ -25,7 +25,20 @@ Subjekt instance from a YAML or JSON string. **Note**: files are not supported t
 
 ## Auth and API services
 
-TODO
+Node.js and Express were used to develop both the RESTful API and authentication services. TypeScript was employed to
+enhance code maintainability.
+
+In details, the authentication service was implemented using JWT (JSON Web Tokens) to ensure secure and stateless
+user authentication.
+
+MongoDB was used as the primary database for storing application data, while Redis was employed for rate limiting
+storage. Additionally, a validation handler has been applied to specific routes to ensure data integrity and
+enforce input validation.
+
+To enhance API usability and maintainability, route documentation has been provided using Swagger, enabling
+interactive exploration and testing of endpoints.
+
+Jest was used as the testing framework.
 
 ## Frontend application
 

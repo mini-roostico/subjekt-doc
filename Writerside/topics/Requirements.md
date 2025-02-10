@@ -57,7 +57,7 @@ save ..> create : <<needs>>
 @enduml
 ```
 
-The user is able to manage sources, creating/renaming/deleting them as well as opening one in order to edit it. The user
+The user is able to manage sources, creating/renaming/deleting them as well as opening one to edit it. The user
 can then save its modifications.
 
 ### The user can customize the generation through simple forms
@@ -81,8 +81,7 @@ btn ..> display : displays
 ```
 
 After a successful authentication, the user can open one of his/her available works and start generating results.
-Using simple forms in the application, he/she can customize the generation parameters in order to define the final 
-results.
+Using simple forms in the application, the generation parameters can be customized to define the final results.
 
 ### The user can inspect the results of the generation easily
 
@@ -114,13 +113,13 @@ correct eventual mistakes in the configuration.
 
 ### The user can authenticate to the system
 
-The user must be able to register as a new user or log in to get authenticated. Some features of the system may or 
+The user must be able to register as a new user or log in to get authenticated. Some features of the system 
 may not be available unless authenticated. 
 
 ### The user can generate results through a configuration
 
 The user can provide a configuration in various forms, for example a YAML document or simple customizable HTML forms.
-Depending on the value set in this configuration, the system must generate results that can be made available as 
+Depending on the values set in this configuration, the system must generate results that can be made available as 
 simple text, a JSON document or as files of various formats. 
 
 ### The user can reuse part of the configuration various times 
@@ -147,7 +146,7 @@ deciding adding a *preamble* to each generated result.
 ### The user can display a tree showing the origin of the results
 
 Since each *subject* can contain permutations of expressions, group of results referring to the same parent subject 
-must be grouped and displayed in tree-like structure, in order to make the generation outcome clear.
+must be grouped and displayed in tree-like structure, making the generation outcome clear.
 
 ## Non-Functional Requirements
 
