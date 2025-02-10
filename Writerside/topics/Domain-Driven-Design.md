@@ -126,10 +126,6 @@ In the context of the Subjekt API, we identified the following terms, expresses 
 | **SourceRegistry**        | An entity that manages the sources' repository.                                                         |
 | **AuthenticationService** | An entity that manages users' authentication.                                                           |
 | **GenerationService**     | An entity that manages the Source elaboration.                                                          |
-| **UserEvent**             | An event that is triggered by an action involving the User in UserRegistry (e.g., creation, etc.).      |
-| **AuthenticationEvent**   | An event that is triggered by an action involving Authentication in UserRegistry (e.g., login, logout). |
-| **SourceEvent**           | An event that is triggered by an action involving the SourceRegistry (e.g., creation, update, etc.).    |
-| **GenerationEvent**       | An event that is triggered by a request for a Source elaboration.                                       |
 
 The `Source` is homonym with the one in the Subjekt library context, but its definition refers to the fact of being
 *editable* and *"saveable"*.
@@ -165,27 +161,14 @@ SourceRegistry "1" o-- "n" sourceApi : "contains"
 
 class AuthenticationService <<Service>>
 
-AuthenticationService ..> AuthenticationEvent : "handles"
-AuthenticationEvent ..> User : "uses"
 AuthenticationService ..> UserRegistry : "updates"
-UserEvent ..> User : "uses"
-AuthenticationService ..> UserEvent : "handles"
 
 class SourceService <<Service>>
-
-SourceService ..> SourceEvent : "handles"
 SourceService ..> SourceRegistry : "updates"
 
 class GenerationService <<Service>>
-
-GenerationService ..> GenerationEvent : "handles"
-GenerationEvent ..> sourceApi : "uses"
 GenerationService ...> resultApi: "presents"
 
-class AuthenticationEvent <<Domain Event>>
-class UserEvent <<Domain Event>>
-class SourceEvent <<Domain Event>>
-class GenerationEvent <<Domain Event>>
 
 User ..> sourceApi : "accesses"
 @enduml
@@ -193,8 +176,9 @@ User ..> sourceApi : "accesses"
 
 ## Subjekt Frontend
 
-The Subjekt Frontend is the context which has more in common with the previous ones, but all the terms are expressed 
-in the scope of "customization" and "presentation". 
+The Subjekt Frontend is the context which has more in common with the previous ones, in fact is not presented in the 
+glossary section. All the terms are expressed, contrary to previous contexts, in the scope of "customization" and 
+"presentation". 
 
 | Glossary term           | Definition                                                                                                                 |
 |-------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -208,9 +192,6 @@ in the scope of "customization" and "presentation".
 | **GenerationResult**    | The result produced after running a generation.                                                                            |
 | **ResolvedSubject**     | An object that contains key-value pairs that represent results of the generation.                                          |
 | **GenerationTree**      | An object that contains the tree of the generation process.                                                                |
-| **AuthenticationEvent** | An event that is triggered by a User that wants to be authenticated (e.g., login).                                         |
-| **SourceEvent**         | An event that is triggered when a User interacts with a Source (e.g. creation, deletion etc.)                              |
-| **GenerationEvent**     | An event that is triggered when a User runs a generation.                                                                  |
 
 The context map for the Subjekt Frontend is the following:
 
