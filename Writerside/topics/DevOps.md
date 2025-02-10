@@ -3,7 +3,7 @@
 The project followed a mix of the *Trunk-based Development* and *Git flow* principles. Pull requests requirements for
 merging were only related to CI/CD pipeline success, not involving PR reviews.
 
-For the `web-api`, the major part of the development used several, separated long-lived feature branches, merging
+For the `api-web`, the major part of the development used several, separated long-lived feature branches, merging
 through **Pull Requests** into the *develop* branch subsequently merged into the *main* every release.
 
 For the `subjekt` library project, the project initially migrated from a JVM only project to a Kotlin Multiplatform
@@ -31,10 +31,9 @@ graph TD;
   check-secrets -->|No secrets| stop1((Stop));
   
   test-extensively --> release-and-publish;
-  test-extensively --> stop2((Stop))
+  test-extensively --> |Test fail| stop2((Stop))
   
   release-and-publish --> success;
-  check-secrets --> success;
   test-extensively --> success;
   
   style stop1 fill:#fdd,stroke:#f00;
@@ -48,9 +47,41 @@ Where:
 Central, NPM, GitHub Packages).
 - `success` is the final step of the pipeline, where the pipeline is considered successful.
 
-### Subjekt - web-api
+### Subjekt - api-web
 
-TODO
+The api web project has to manage two subprojects contemporarily, the `api` and the `auth` one. The pipeline managed 
+common steps with a `matrix` strategy.
+
+```mermaid
+graph TD;
+  check-secrets -->|Secrets available| precompute-next-version;
+  check-secrets -->|No secrets| stop1((Stop));
+
+  precompute-next-version --> test-common;
+  precompute-next-version --> |Will release| deploy-to-registry;
+  test-common --> test-and-check;
+  test-common --> |Test fail| stop2((Stop));
+  test-and-check --> release;
+  test-and-check --> |Test fail| stop3((Stop));  
+  test-and-check --> success;
+  release --> deploy-to-registry;
+  release --> success;
+  deploy-to-registry --> success;
+
+  style stop1 fill:#fdd,stroke:#f00;
+  style stop2 fill:#fdd,stroke:#f00;
+  style stop3 fill:#fdd,stroke:#f00;
+```
+Where:
+- `check-secrets`: checks if the necessary secrets are available for the CI/CD pipeline to run.
+- `precompute-next-version` computes the next version of the project based on the previous one and the commits since 
+the last release.
+- `test-common` runs tests on the common project.
+- `test-and-check` runs tests and checks on the `api` and `auth` modules.
+- `release` releases the project to the public repository.
+- `deploy-to-registry` deploys the project to the GitHub Packages Docker registry, ONLY if the `precompute-next-version`
+  step triggered a release.
+- `success` is the final step of the pipeline, where the pipeline is considered successful.
 
 ### Subjekt - web-frontend
 
@@ -61,17 +92,21 @@ graph TD;
   
   precompute-next-version --> build;
   build --> check;
-  check --> release;
+  
   build --> release;
-  check-secrets --> release;
-  release --> deploy-to-registry;
+  build --> |Build fail| stop2((Stop));
   precompute-next-version --> deploy-to-registry;
   deploy-to-registry --> success;
   build --> success;
+  check --> |Check fail| stop3((Stop));
   check --> success;
+  check --> release;
   release --> success;
+  release --> deploy-to-registry;
   
   style stop1 fill:#fdd,stroke:#f00;
+  style stop2 fill:#fdd,stroke:#f00;
+  style stop3 fill:#fdd,stroke:#f00;
 ```
 
 Where:
