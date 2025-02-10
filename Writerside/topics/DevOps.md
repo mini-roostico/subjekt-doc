@@ -3,16 +3,13 @@
 The project followed a mix of the *Trunk-based Development* and *Git flow* principles. Pull requests requirements for
 merging were only related to CI/CD pipeline success, not involving PR reviews.
 
-For the `api-web`, the major part of the development used several, separated long-lived feature branches, merging
-through **Pull Requests** into the *develop* branch subsequently merged into the *main* every release.
-
 For the `subjekt` library project, the project initially migrated from a JVM only project to a Kotlin Multiplatform
 one using Git flow, organizing the migration into separated, big branches that were merged into a long-lived branch
 called `feat/multiplatform` that was ultimately merged into the `main` branch introducing a breaking change and
 therefore a `MAJOR` release. Following up to that, the approach adopted was the Trunk-based one, introducing smaller,
 incremental changes with frequent releases, all backed by a relevant CI/CD pipeline.
 
-Finally, for `web-frontend` and `bootstrap`, the projects started with Trunk-based approach since the beginning, with a
+For `api-web`, `web-frontend` and `bootstrap`, the projects started with Trunk-based approach since the beginning, with a
 simple CI/CD pipeline to automatize publication and check the building outcome of the project. 
 
 The whole project used **Conventional commits** when committing code as well as **Semantic Release and Versioning** for
