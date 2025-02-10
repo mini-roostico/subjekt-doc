@@ -59,6 +59,7 @@ graph TD;
 
   precompute-next-version --> test-common;
   precompute-next-version --> |Will release| deploy-to-registry;
+  precompute-next-version --> |Will release| deploy-on-pages;
   test-common --> test-and-check;
   test-common --> |Test fail| stop2((Stop));
   test-and-check --> release;
@@ -66,11 +67,9 @@ graph TD;
   test-and-check --> success;
   release --> deploy-to-registry;
   release --> success;
+  release --> deploy-on-pages;
   deploy-to-registry --> success;
-
-  style stop1 fill:#fdd,stroke:#f00;
-  style stop2 fill:#fdd,stroke:#f00;
-  style stop3 fill:#fdd,stroke:#f00;
+  deploy-on-pages --> success;
 ```
 Where:
 - `check-secrets`: checks if the necessary secrets are available for the CI/CD pipeline to run.
@@ -103,10 +102,6 @@ graph TD;
   check --> release;
   release --> success;
   release --> deploy-to-registry;
-  
-  style stop1 fill:#fdd,stroke:#f00;
-  style stop2 fill:#fdd,stroke:#f00;
-  style stop3 fill:#fdd,stroke:#f00;
 ```
 
 Where:
@@ -120,5 +115,16 @@ last release.
 step triggered a release.
 - `success` is the final step of the pipeline, where the pipeline is considered successful.
 
+### Subjekt - bootstrap
 
+The `bootstrap` project performs **end-to-end** tests on the project, building the project with `docker-compose` and 
+running the tests with the `playwright` library.
 
+```mermaid
+graph TD;
+  check-secrets -->|Secrets available| test;
+  check-secrets -->|No secrets| stop1((Stop));
+  test --> | Test success | release;
+  test --> |Test fail| stop2((Stop));
+    release --> success;
+```
