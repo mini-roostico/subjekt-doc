@@ -32,9 +32,6 @@ graph TD;
   
   release-and-publish --> success;
   test-extensively --> success;
-  
-  style stop1 fill:#fdd,stroke:#f00;
-  style stop2 fill:#fdd,stroke:#f00;
 ```
 
 Where: 
