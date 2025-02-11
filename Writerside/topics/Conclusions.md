@@ -43,5 +43,4 @@ depending on traffic intensity would enhance the system’s robustness, especial
 requests.
 
 Another aspect that could be explored in future iterations is collaboration within a wider team.
-Working in a larger group could introduce new perspectives and streamline the development process,
-as well as improve the management of more complex systems.
+Working in a larger group could introduce better coordination requirements.
