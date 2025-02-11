@@ -38,6 +38,10 @@ enforce input validation.
 To enhance API usability and maintainability, route documentation has been provided using Swagger, enabling
 interactive exploration and testing of endpoints.
 
+A simple role-based access control (RBAC) has been implemented to differentiate between administrative and regular user
+privileges. Access control rules ensure that only authorized users can perform specific actions, enhancing security
+and maintaining data integrity.
+
 Jest was used as the testing framework.
 
 ## Frontend application

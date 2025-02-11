@@ -468,11 +468,18 @@ and to design a more cohesive and consistent system.
 ```plantuml
 @startuml
 hide empty members
+
+enum Role {
+    admin
+    user
+}
+
 interface User {
     + email: String
     + password: String
     + firstName: String
     + lastName: String
+    + role: Role
 }
 interface UserRegistry {
     + createUser(email: String, password: String, firstName: String, lastName: String): User
@@ -501,6 +508,7 @@ SourceRegistry ..> Source : "contains"
 UserRegistry ..> User : "contains"
 SourceService ..> AuthenticationService : "contacts"
 
+User ..> Role : "has"
 
 interface Result {
     + asString(): String
