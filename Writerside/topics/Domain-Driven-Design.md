@@ -193,18 +193,18 @@ The Subjekt Frontend is the context which has more in common with the previous o
 glossary section. All the terms are expressed, contrary to previous contexts, in the scope of "customization" and 
 "presentation". 
 
-| Glossary term           | Definition                                                                                                                 |
-|-------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| **User**                | A person who can create/edit/open Sources.                                                                                 |
-| **Suite**               | A container of values that can used to generate results.                                                                   |
-| **Source**              | A configuration object that can be saved and edited.                                                                       |
-| **Subject**             | An entity that contains key-value pairs that define the generation results.                                                |
-| **Configuration**       | An object that contains key-value pairs that customize some global generation preferences.                                 |
-| **Parameter**           | An entity that can have multiple values and that can be used inside Subjects                                               |
-| **Macro**               | An entity that can accept multiple arguments and values that depends on the arguments and that can be used inside Subjects |
-| **GenerationResult**    | The result produced after running a generation.                                                                            |
-| **ResolvedSubject**     | An object that contains key-value pairs that represent results of the generation.                                          |
-| **GenerationTree**      | An object that contains the tree of the generation process.                                                                |
+| Glossary term       | Definition                                                                                                                 |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------|
+| **User**            | A person who can create/edit/open Sources.                                                                                 |
+| **Suite**           | A container of values that can used to generate results.                                                                   |
+| **Source**          | A configuration object that can be saved and edited.                                                                       |
+| **Subject**         | An entity that contains key-value pairs that define the generation results.                                                |
+| **Configuration**   | An object that contains key-value pairs that customize some global generation preferences.                                 |
+| **Parameter**       | An entity that can have multiple values and that can be used inside Subjects                                               |
+| **Macro**           | An entity that can accept multiple arguments and values that depends on the arguments and that can be used inside Subjects |
+| **Result**          | The result produced after running a generation.                                                                            |
+| **ResolvedSubject** | An object that contains key-value pairs that represent results of the generation.                                          |
+| **GenerationTree**  | An object that contains the tree of the generation process.                                                                |
 
 The context map for the Subjekt Frontend is the following:
 
@@ -237,17 +237,17 @@ class sourceSubjekt as "Source" <<Entity>>
 class User <<Entity>>
 
 sourceSubjekt ..> Suite : "refers to"
-Suite ..> GenerationResultAggregate : "produces"
+Suite ..> ResultAggregate : "produces"
 
 User ..> sourceSubjekt : "accesses"
 
-package GenerationResultAggregate {
-    class GenerationResult <<Aggregate Root>>
+package ResultAggregate {
+    class Result <<Aggregate Root>>
     class ResolvedSubject <<Value Object>>
     class GenerationGraph <<Value Object>>
     
-    GenerationResult "1" o-- "n" ResolvedSubject
-    GenerationResult "1" o-- "1" GenerationGraph
+    Result "1" o-- "n" ResolvedSubject
+    Result "1" o-- "1" GenerationGraph
 @enduml
 ```
 
@@ -286,7 +286,7 @@ graph TD
         F5[Configuration]
         F6[Parameter]
         F7[Macro]
-        F8[GenerationResult]
+        F8[Result]
         F9[ResolvedSubject]
     end
 
@@ -575,7 +575,7 @@ interface Macro {
     + definition: String
     + values: List<String>
 }
-interface GenerationResult {
+interface Result {
     + resolvedSubjects: List<ResolvedSubject>
     + generationGraph: GenerationGraph
 }
@@ -592,15 +592,15 @@ Suite *-- Subject
 Suite *-- Parameter
 Suite *-- Macro
 Suite *-- Configuration
-GenerationResult *-- ResolvedSubject
-GenerationResult *-- GenerationGraph
+Result *-- ResolvedSubject
+Result *-- GenerationGraph
 
-Suite --> GenerationResult : "produces"
+Suite --> Result : "produces"
 @enduml
 ```
 
 Main entities of the Subjekt Library are used also in the Subjekt Frontend. Here the `Suite` class is used to represent
 the `Source` from the point of view of the *generation*, while the `Source` is used to represent the management of the
 `User` saved data. The `Source` is saved containing a YAML, meaning that the `Suite` gets processed inside the 
-application logic. The `GenerationResult` is the final product of the generation process, and it contains the 
+application logic. The `Result` is the final product of the generation process, and it contains the 
 `ResolvedSubject`s and the `GenerationGraph` summarizing the process.
