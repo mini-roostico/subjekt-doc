@@ -39,6 +39,10 @@ node "Database" << container >> {
     [mongo] << Database >>
 }
 
+node "Database rate limiter" << container >> {
+    [redis] << Database >>
+}
+
 [nginx] ..> [api-service] : <<serves>>
 [nginx] ..> [auth-service] : <<serves>>
 [nginx] ..> [vue-app] : <<serves>>
@@ -48,6 +52,8 @@ node "Database" << container >> {
 [auth-service] ..> [api-common] : <<uses>>
 [api-service] ..> [mongo] : <<uses>>
 [auth-service] ..> [mongo] : <<uses>>
+[api-service] ..> [redis] : <<uses>>
+[auth-service] ..> [redis] : <<uses>>
 
 package "Repositories" {
     [Maven]
