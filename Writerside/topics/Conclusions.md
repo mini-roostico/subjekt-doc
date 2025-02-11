@@ -27,3 +27,21 @@ the challenges of team coordination and the integration of different parts of th
 codebase.
 
 ## Luca Rubboli
+
+This project has been a valuable learning experience, reinforcing the importance of a well-structured development
+process.
+
+One of the key takeaways has been the importance of automating all phases of development, from testing to deployment.
+This automation not only saves significant time but also proves especially beneficial in a multi-service environment,
+where managing different components efficiently is crucial for scalability and maintainability.
+Focusing on a good software architecture highlighted how important is to maintain a proper test suite,
+especially if matched with build automation tools.
+
+However, there are areas for potential improvement. In terms of features, there is room for better results
+visualization and the introduction of more advanced functionality. Furthermore, replicating services to scale
+depending on traffic intensity would enhance the system’s robustness, especially for handling larger volumes of
+requests.
+
+Another aspect that could be explored in future iterations is collaboration within a wider team.
+Working in a larger group could introduce new perspectives and streamline the development process,
+as well as improve the management of more complex systems.
