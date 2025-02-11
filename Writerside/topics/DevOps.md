@@ -74,6 +74,8 @@ the last release.
 - `release` releases the project to the public repository.
 - `deploy-to-registry` deploys the project to the GitHub Packages Docker registry, ONLY if the `precompute-next-version`
   step triggered a release.
+- `deploy-on-pages` deploys the project API documentation to GitHub Pages, ONLY if the `precompute-next-version` step 
+triggered a release.
 - `success` is the final step of the pipeline, where the pipeline is considered successful.
 
 ### Subjekt - web-frontend
@@ -122,3 +124,8 @@ graph TD;
   test --> |Test fail| stop2((Stop));
     release --> success;
 ```
+
+- `check-secrets` checks if the necessary secrets are available for the CI/CD pipeline to run.
+- `test` runs the end-to-end tests on the project using the `playwright` library.
+- `release` releases the project to the public repository.
+- `success` is the final step of the pipeline, where the pipeline is considered successful.
