@@ -25,7 +25,7 @@ Subjekt instance from a YAML or JSON string. **Note**: files are not supported t
 
 ## Auth and API services
 
-Node.js and Express were used to develop both the RESTful API and authentication services. TypeScript was employed to
+Node.js and Express were used to develop both the RESTful services (i.e. `auth` and `api`). TypeScript was employed to
 enhance code maintainability.
 
 In details, the authentication service was implemented using JWT (JSON Web Tokens) to ensure secure and stateless
